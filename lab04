@@ -1,0 +1,78 @@
+# Перелік порівнянь
+comparisons = 0
+
+
+def linear_search(items, target):
+    global comparisons
+    for i in range(len(items)):
+        comparisons += 1
+        if items[i] == target:
+            return i
+    return -1
+
+
+def binary_search(items, target):
+    global comparisons
+    low = 0
+    high = len(items) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        comparisons += 1
+
+        if items[mid] == target:
+            return mid
+        elif items[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    return -1
+
+
+def report(name, items, target):
+    global comparisons
+    comparisons = 0
+    index = (
+        linear_search(items, target)
+        if name == "Linear"
+        else binary_search(items, target)
+    )
+    print(
+        f"Алгоритм: {name:<7} | Шукаємо: {target:<3} | Індекс: {index:<2} | Порівнянь: {comparisons}"
+    )
+
+
+def main():
+    data = [42, 8, 60, 19, 3, 55, 12, 31, 68, 24, 49, 37, 71, 5, 27]
+    sorted_data = sorted(data)
+
+    print("--- Результати для таблиці (Частина 2) ---")
+    tests = [
+        ("1. Значення стоїть першим", 3),
+        ("2. Значення стоїть останнім", 71),
+        ("3. Значення посередині", 31),
+        ("4. Відсутнє, менше за всі", 1),
+        ("5. Відсутнє, більше за всі", 99),
+        ("6. Відсутнє, між сусідніми", 50),
+    ]
+
+    for title, target in tests:
+        print(f"\n{title}:")
+        report("Linear", sorted_data, target)
+        report("Binary", sorted_data, target)
+
+    print("\n7. Масив з одного елемента [42]:")
+    report("Linear", [42], 42)
+    report("Binary", [42], 42)
+
+    print("\n8. Порожній масив []:")
+    report("Linear", [], 42)
+    report("Binary", [], 42)
+
+    print("\n--- Експеримент на невідсортованих даних (Частина 3) ---")
+    report("Binary", data, 55)
+
+
+if __name__ == "__main__":
+    main()
